@@ -1,0 +1,127 @@
+"""
+MDST Workshop 1 - Python Basics Starter Code
+"""
+
+import random as ran
+import base64
+
+
+def part1(num):
+    """
+    Ask the user for a number. Depending on whether the number is even or odd,
+    print out an appropriate (i.e. "even" or "odd") message to the user.
+    """
+    num = input("Enter a number: ")
+    if (int(num) % 2) == 0:
+        print("even")
+    else:
+        print("odd")
+
+
+def part2():
+    """
+    Generate a random number between 1 and 9 (including 1 and 9). Ask the user
+    to guess the number, then tell them whether they guessed too low, too high,
+    or exactly right.
+    (Hint: remember to use the user input lessons from the very first
+    exercise).
+    Keep the game going until the user types "exit".
+    [ try checking the random module in python on google. Concepts: Infinite
+    loops, if, else, loops and user/input].
+    """
+    correct = False
+    while not correct:
+        ran_num = ran.randrange(1, 9, 1)
+        in_val = input("Enter a number 1-10 or 'exit': ")
+        if str(in_val) == "exit":
+            correct = True
+        elif int(in_val) == ran_num:
+            print("exactly right")
+        elif int(in_val) > ran_num:
+            print("too high")
+        elif int(in_val) < ran_num:
+            print("too low")
+
+
+def part3(string):
+    """
+    Ask the user for a string and print out whether this string is a palindrome
+    or not. (A palindrome is a string that reads the same forwards and
+    backwards.)
+    """
+
+    in_word = input("Enter a word: ")
+    new_str = str()
+
+    # creates 'newString' equal to reversed word
+    for i in range(len(in_word), 0, -1):
+        new_str += str(in_word[i - 1])
+
+    # checks if 'newString' is equivalent to original word
+    # outputs palindrome if true
+    if new_str == str(in_word):
+        print("palindrome!")
+    else:
+        print("not palindrome!")
+
+
+def part4a(filename, username, password):
+    """
+    Encrypt your username and password using base64 module
+    Store your encrypted username on the first line and your encrypted password
+    on the second line.
+    """
+    encoded_user_bytes = base64.b64encode(username.encode("utf-8"))
+    encoded_pass_bytes = base64.b64encode(password.encode("utf-8"))
+    encoded_user_str = str(encoded_user_bytes, "utf-8")
+    encoded_pass_str = str(encoded_pass_bytes, "utf-8")
+
+    file = open(filename, 'w')
+    file.write(encoded_user_str)
+    file.write('\n')
+    file.write(encoded_pass_str)
+    file.close()
+   # with open(filename, 'w') as file:
+   #     file.write(encoded_user_str)
+    #    file.write('\n')
+     #   file.write(encoded_pass_str)
+
+
+def part4b(filename, password=None):
+    """
+    Create a function to read the file with your login information.
+    Print out the decrypted username and password.
+    If a password is specified, update the file with the new password.
+    """
+    file_object = open(filename, 'r')
+    line_1 = file_object.readlines(2)
+    line_2 = file_object.readlines(3)
+    line_1 = str(line_1)
+    line_2 = str(line_2)
+    decoded_user = base64.b64decode(line_1).decode("utf-8")
+    decoded_pass = base64.b64decode(line_2).decode("utf-8")
+
+    file2 = open(filename, 'a')
+    file2.write('\n')
+    file2.write(decoded_user)
+    if password:
+        file2.write(password)
+    else:
+        file2.write(decoded_pass)
+
+
+
+
+
+
+
+if __name__ == "__main__":
+   # part1(3)  # odd!
+   # part1(4)  # even!
+   # part2()
+   # part3("ratrace")  # False
+   # part3("racecar")  # True
+    part4a("secret.txt", "naitian", "p4ssw0rd")
+    part4b("secret.txt")
+    part4b("secret.txt", password="p4ssw0rd!")
+    part4b("secret.txt")
